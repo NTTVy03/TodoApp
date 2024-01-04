@@ -44,3 +44,7 @@ samples, guidance on mobile development, and a full API reference.
 
 - Enable Email/Password option in Firebase/Authentication
 - Add an firebase instance (see commit "Email & Password - Firebase Authentication")
+
+### Create Login & SignUp Pages
+- Do something after a 'try...catch...', have to bring it into 'try <>' and 'catch <>'. Not after 'try...catch...'
+

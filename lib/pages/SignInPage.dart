@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_todo_app/pages/HomePage.dart';
+import 'package:flutter_todo_app/pages/SignUpPage.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -11,6 +13,13 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  firebase_auth.FirebaseAuth firebaseAuth = firebase_auth.FirebaseAuth.instance;
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,11 +61,11 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                 height: 15,
               ),
-              textItem('Email...'),
+              textItem('Email...', _emailController, false),
               SizedBox(
                 height: 15,
               ),
-              textItem('Password...'),
+              textItem('Password...', _passwordController, true),
               SizedBox(
                 height: 30,
               ),
@@ -77,27 +86,25 @@ class _SignInPageState extends State<SignInPage> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (builder) => SignUpPage()),
+                        (route) => false,
+                      );
+                    },
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Forgot Password?',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              )
             ],
           ),
         ),
@@ -107,7 +114,7 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget buttonItem(String text, String icon, double size) {
     return Container(
-      width: MediaQuery.of(context).size.width - 60,
+      width: MediaQuery.of(context).size.width - 100,
       height: 60,
       child: Card(
         color: Colors.black,
@@ -143,16 +150,31 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget textItem(String labelText) {
+  // obsureText is used to hide the password.
+  Widget textItem(
+      String labelText, TextEditingController controller, bool obscureText) {
     return Container(
       width: MediaQuery.of(context).size.width - 70,
       height: 55,
       child: TextFormField(
+        obscureText: obscureText,
+        controller: controller,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 17,
+        ),
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: TextStyle(
             color: Colors.white,
             fontSize: 17,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide(
+              color: Colors.amber,
+              width: 1.5,
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
@@ -167,27 +189,61 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget colorButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width - 90,
-      height: 60,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xfffd746c),
-            Color(0xffff9068),
-            Color(0xfffd746c),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.blue,
-      ),
-      child: Center(
-        child: Text(
-          'Sign In',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
+    return InkWell(
+      onTap: () async {
+        setState(() {
+          isLoading = true;
+        });
+
+        try {
+          // Sign in the user with the email and password.
+          firebase_auth.UserCredential userCredential =
+              await firebaseAuth.signInWithEmailAndPassword(
+                  email: _emailController.text,
+                  password: _passwordController.text);
+
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (builder) => HomePage()),
+            (route) => false,
+          );
+        } on firebase_auth.FirebaseAuthException catch (e) {
+          // Show the error message to the user.
+          final SnackBar snackBar = SnackBar(content: Text(e.toString()));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          setState(() {
+            isLoading = false;
+          });
+        }
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width - 90,
+        height: 60,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xfffd746c),
+              Color(0xffff9068),
+              Color(0xfffd746c),
+            ],
           ),
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.blue,
+        ),
+        child: Center(
+          child: isLoading
+              ? CircularProgressIndicator()
+              : Text(
+                  'Sign In',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
         ),
       ),
     );
