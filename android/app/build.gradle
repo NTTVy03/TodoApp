@@ -65,3 +65,6 @@ flutter {
 }
 
 dependencies {}
+
+// Google Play services
+apply plugin: 'com.google.gms.google-services'
