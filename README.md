@@ -36,7 +36,7 @@ samples, guidance on mobile development, and a full API reference.
 - Setup Firebase for Flutter project: 
     + [Create Firebase project](https://console.firebase.google.com/)
     + Firebase: with Flutter option
-    + Addd [firebase-core](https://pub.dev/packages/firebase_core/)
+    + Add [firebase-core](https://pub.dev/packages/firebase_core/)
     + Add [firebase-auth](https://pub.dev/packages/firebase_auth)
     + Add 'await Firebase.initializeApp();' in **main.dart**
 
