@@ -63,4 +63,11 @@ samples, guidance on mobile development, and a full API reference.
     + Add GG sign-in method to Sign Up Page
     
 - Keep the user log in:
+    + Uninstall the old version of app (login without logout causes issues)
     + Add [flutter_secure_storageflutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) to store the access token. Make sure that the minimum sdk version is 18 (config in android/app/build.gradle)
+    + Store the access token in AuthClass after sign in successfully
+    + Check if token is null or not to decide which page should be show first (**main.dart**)
+
+- Log out:
+    + Add a log out icon in the navbar of homepage to test log out function
+    + Create a log out method in AuthClass
