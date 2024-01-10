@@ -21,7 +21,7 @@ class _SignInPageState extends State<SignInPage> {
 
   bool isLoading = false;
 
-  AuthClass authClass = new AuthClass();
+  AuthClass authClass = AuthClass();
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,10 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                 height: 30,
               ),
-              colorButton(),
+              colorButton(() async {
+                authClass.emailSignIn(
+                    context, _emailController.text, _passwordController.text);
+              }),
               SizedBox(
                 height: 20,
               ),
@@ -198,38 +201,9 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget colorButton() {
+  Widget colorButton(void Function()? onTap) {
     return InkWell(
-      onTap: () async {
-        setState(() {
-          isLoading = true;
-        });
-
-        try {
-          // Sign in the user with the email and password.
-          firebase_auth.UserCredential userCredential =
-              await firebaseAuth.signInWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text);
-
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (builder) => HomePage()),
-            (route) => false,
-          );
-        } on firebase_auth.FirebaseAuthException catch (e) {
-          // Show the error message to the user.
-          final SnackBar snackBar = SnackBar(content: Text(e.toString()));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-          setState(() {
-            isLoading = false;
-          });
-        }
-      },
+      onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width - 90,
         height: 60,

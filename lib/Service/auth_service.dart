@@ -5,15 +5,81 @@ import 'package:flutter_todo_app/pages/HomePage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthClass {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final storage = FlutterSecureStorage();
+
+  // Email & Password Sign Up
+  Future<void> emailSignUp(
+      BuildContext context, String email, String password) async {
+    // setState(() {
+    //   isLoading = true;
+    // });
+
+    try {
+      // Create a user with the email rand password.
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      storeTokenAndData(userCredential);
+
+      // create an instance of the current user in firestore
+
+      // setState(() {
+      //   isLoading = false;
+      // });
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (builder) => HomePage()),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      // Show the error message to the user.
+      final SnackBar snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // setState(() {
+      //   isLoading = false;
+      // });
+    }
+  }
+
+  // Email & Password Sign In
+  Future<void> emailSignIn(
+      BuildContext context, String email, String password) async {
+    // setState(() {
+    //   isLoading = true;
+    // });
+
+    try {
+      // Sign in the user with the email and password.
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      storeTokenAndData(userCredential);
+      // setState(() {
+      //   isLoading = false;
+      // });
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (builder) => HomePage()),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      // Show the error message to the user.
+      final SnackBar snackBar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      // setState(() {
+      //   isLoading = false;
+      // });
+    }
+  }
+
+  // GG Sign In
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
-
-  FirebaseAuth auth = FirebaseAuth.instance;
-  final storage = new FlutterSecureStorage();
 
   Future<void> googleSignIn(BuildContext context) async {
     try {

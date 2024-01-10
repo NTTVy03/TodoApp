@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_todo_app/Service/auth_service.dart';
-import 'package:flutter_todo_app/pages/HomePage.dart';
 import 'package:flutter_todo_app/pages/SignInPage.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -75,7 +74,10 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(
                 height: 30,
               ),
-              colorButton(),
+              colorButton(() async {
+                authClass.emailSignUp(
+                    context, _emailController.text, _passwordController.text);
+              }),
               SizedBox(
                 height: 20,
               ),
@@ -198,38 +200,39 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget colorButton() {
+  Widget colorButton(void Function()? onTap) {
     return InkWell(
-      onTap: () async {
-        setState(() {
-          isLoading = true;
-        });
+      onTap: onTap,
+      // () async {
+      //   setState(() {
+      //     isLoading = true;
+      //   });
 
-        try {
-          // Create a user with the email rand password.
-          firebase_auth.UserCredential userCredential =
-              await firebaseAuth.createUserWithEmailAndPassword(
-                  email: _emailController.text,
-                  password: _passwordController.text);
-          // print(userCredential.user.email);
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (builder) => HomePage()),
-            (route) => false,
-          );
-        } on firebase_auth.FirebaseAuthException catch (e) {
-          // Show the error message to the user.
-          final SnackBar snackBar = SnackBar(content: Text(e.toString()));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //   try {
+      //     // Create a user with the email rand password.
+      //     firebase_auth.UserCredential userCredential =
+      //         await firebaseAuth.createUserWithEmailAndPassword(
+      //             email: _emailController.text,
+      //             password: _passwordController.text);
+      //     // print(userCredential.user.email);
+      //     setState(() {
+      //       isLoading = false;
+      //     });
+      //     Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(builder: (builder) => HomePage()),
+      //       (route) => false,
+      //     );
+      //   } on firebase_auth.FirebaseAuthException catch (e) {
+      //     // Show the error message to the user.
+      //     final SnackBar snackBar = SnackBar(content: Text(e.toString()));
+      //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-          setState(() {
-            isLoading = false;
-          });
-        }
-      },
+      //     setState(() {
+      //       isLoading = false;
+      //     });
+      //   }
+      // },
       child: Container(
         width: MediaQuery.of(context).size.width - 90,
         height: 60,
