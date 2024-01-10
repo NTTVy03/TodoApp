@@ -48,3 +48,19 @@ samples, guidance on mobile development, and a full API reference.
 ### Create Login & SignUp Pages
 - Do something after a 'try...catch...', have to bring it into 'try <>' and 'catch <>'. Not after 'try...catch...'
 
+- Login & signup with Google
+    + Get SHA-1 key (1): Open terminal in **/android/gradlew** and run **./gradlew signingReport** and copy the SHA-1 key
+    + Get SHA-1 key (2):
+        * Open cmdline in jdk bin: **C:\Program Files\Java\jdk-21.0.1\bi**n
+        * Find keystore: **C:\Users\Admin\.android\debug.keystore**
+        * Replace keystore in keytool cmd and run: **keytool -list -v -keystore C:\Users\Admin\.android\debug.keystore -alias androiddebugkey**
+        * Enter keyword: **android**
+        * Get SHA-1 key
+    + Other ways to get SHA-1 key: [link 1](https://stackoverflow.com/questions/55496090/how-to-get-sha1-of-android-app-in-vs-code) or [link 2](https://developers.google.com/android/guides/client-auth)
+    + [Fix error JAVA_HOME is not set](https://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/index.html)
+    + Add [GG sign-in package](https://pub.dev/packages/google_sign_in)
+    + Add **service/auth_service.dart**: contain GG sign-in method
+    + Add GG sign-in method to Sign Up Page
+    
+- Keep the user log in:
+    + Add [flutter_secure_storageflutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) to store the access token. Make sure that the minimum sdk version is 18 (config in android/app/build.gradle)
