@@ -30,8 +30,8 @@ samples, guidance on mobile development, and a full API reference.
     + Init git in terminal
 
 - Add google services plugin:
-    1) app/build.gradel: apply plugin: 'com.google.gms.google-services'
-    2) build.gradel: classpath 'com.google.gms:google-services:4.3.5'
+    1) android/app/build.gradle: apply plugin: 'com.google.gms.google-services'
+    2) android/build.gradle: classpath 'com.google.gms:google-services:4.3.5'
 
 - Setup Firebase for Flutter project: 
     + [Create Firebase project](https://console.firebase.google.com/)
@@ -51,7 +51,7 @@ samples, guidance on mobile development, and a full API reference.
 - Login & signup with Google
     + Get SHA-1 key (1): Open terminal in **/android/gradlew** and run **./gradlew signingReport** and copy the SHA-1 key
     + Get SHA-1 key (2):
-        * Open cmdline in jdk bin: **C:\Program Files\Java\jdk-21.0.1\bi**n
+        * Open cmdline in jdk bin: **C:\Program Files\Java\jdk-21.0.1\bin**
         * Find keystore: **C:\Users\Admin\.android\debug.keystore**
         * Replace keystore in keytool cmd and run: **keytool -list -v -keystore C:\Users\Admin\.android\debug.keystore -alias androiddebugkey**
         * Enter keyword: **android**
