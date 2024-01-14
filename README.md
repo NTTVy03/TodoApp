@@ -35,6 +35,7 @@ samples, guidance on mobile development, and a full API reference.
 
 - Setup Firebase for Flutter project: 
     + [Create Firebase project](https://console.firebase.google.com/)
+    + [Add Firebase to Flutter Project](https://firebase.google.com/docs/flutter/setup?platform=ios)
     + Firebase: with Flutter option
     + Add [firebase-core](https://pub.dev/packages/firebase_core/)
     + Add [firebase-auth](https://pub.dev/packages/firebase_auth)
@@ -62,6 +63,11 @@ samples, guidance on mobile development, and a full API reference.
     + Add **service/auth_service.dart**: contain GG sign-in method
     + Add GG sign-in method to Sign Up Page
     
+- Login with Facebook:
+    + [Create an Facebook app ID](https://webkul.com/blog/how-to-generate-facebook-app-id/)
+    + [Config for Android](https://facebook.meedu.app/docs/6.x.x/android)
+    + [Add function for facebook login in AuthClass](https://firebase.flutter.dev/docs/auth/social/)
+    
 - Keep the user log in:
     + Uninstall the old version of app (login without logout causes issues)
     + Add [flutter_secure_storageflutter_secure_storage](https://pub.dev/packages/flutter_secure_storage) to store the access token and user data. Make sure that the minimum sdk version is 18 (config in android/app/build.gradle)
@@ -72,3 +78,8 @@ samples, guidance on mobile development, and a full API reference.
 - Log out:
     + Add a log out icon in the navbar of homepage to test log out function
     + Create a log out method in AuthClass
+
+### Cloud Firestore
+- Set up:
+    + Add [cloud firestore](https://pub.dev/packages/cloud_firestore)
+    + Add an entity: 
